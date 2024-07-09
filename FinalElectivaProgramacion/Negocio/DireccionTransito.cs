@@ -61,11 +61,11 @@ namespace Negocio
 
                 if (tipo == "LEVE")
                 {
-                    infraccion = new InfraccionLeve((int)readers["Id"], (string)readers["Descripcion"], double.Parse((string)readers["Importe"]), tipo);
+                    infraccion = new InfraccionLeve((int)readers["Id"], (string)readers["Descripcion"], (double)((long)readers["Importe"]), tipo);
                 }
                 else
                 {
-                    infraccion = new InfraccionGrave((int)readers["Id"], (string)readers["Descripcion"], double.Parse((string)readers["Importe"]), tipo);
+                    infraccion = new InfraccionGrave((int)readers["Id"], (string)readers["Descripcion"], (double)((long)readers["Importe"]), tipo);
                 }
 
                 infracciones.Add(infraccion);
@@ -109,9 +109,9 @@ namespace Negocio
             while (readers.Read())
             {
                 // Buscar el incidente que se pagó
-                Incidente inc = incidentes.First(i => i.Id == ((int)readers["IdIncidente"]));
+                Incidente inc = incidentes.Find(i => i.Id == ((int)readers["IdIncidente"]));
 
-                Pago pago = new Pago((int)readers["Id"], DateTime.Parse((string)readers["Fecha"]), inc, double.Parse((string)readers["Monto"]));
+                Pago pago = new Pago((int)readers["Id"], DateTime.Parse((string)readers["Fecha"]), inc, (double)((long)readers["Monto"]));
 
                 pagos.Add(pago);
             }
@@ -187,23 +187,28 @@ namespace Negocio
             return this.pagos.Any(p => p.Incidente.Id == inc.Id);
         }
 
-        public void generatePDF(int codPago, double monto)
+        public List<Incidente> buscarIncidentesPatente(string patente)
         {
+            return Incidentes.FindAll(inc => inc.Vehiculo.Patente.ToLower() == patente.ToLower());
+        }
+
+        public void descargarPDF(int idIncidente)
+        {
+            Incidente incidente = incidentes.Find(i => i.Id == idIncidente);
+            double monto = incidente.Infraccion.calcularImporte(DateTime.Now);
+
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-
             PdfDocument doc = new PdfDocument();
-
             PdfPage page = doc.AddPage();
 
             XGraphics gfx = XGraphics.FromPdfPage(page);
-
             XFont font = new XFont("Arial", 20);
 
-            gfx.DrawString("Cupón de pago - " + codPago, font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
+            gfx.DrawString("ORDEN DE PAGO INFRACCIÓN DE TRÁNSITO", font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
+            gfx.DrawString("Orden de pago: " + idIncidente, font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
+            gfx.DrawString("Monto a pagar: " + monto, font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
 
-            gfx.DrawString("Monto: " + monto, font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
-
-            doc.Save("test");
+            doc.Save("OrdenPago-" + idIncidente);
         }
     }
 }

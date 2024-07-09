@@ -12,7 +12,7 @@ namespace Datos
             // https://download.cnet.com/microsoft-access-database-engine-2010-redistributable-64-bit/3001-10254_4-75452796.html?dt=internalDownload
             // string connectionString = "Data Source=C:\\Proyecto Club Deportivo\\TPClubDeportivo\\CapaDeDatos\\BD.db";
             // Cadena de conexión a la base de datos Access
-            string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\Lvt\\Downloads\\final_electiva_programacion-master\\FinalElectivaProgramacion\\Datos\\DB.accdb";
+            string connectionString = "Provider=Microsoft.ACE.OLEDB.16.0;Data Source=C:\\Users\\Lvt\\Downloads\\FinalElectivaProgramacion\\FinalElectivaProgramacion\\Datos\\DB.accdb";
 
             this.conexion = new OleDbConnection(connectionString);
             return conexion;
@@ -26,11 +26,21 @@ namespace Datos
 
                 this.conexion.Open();
 
-                int resultado = comando.ExecuteNonQuery(); // Devuelve el número de filas afectadas
+                comando.ExecuteNonQuery();
+
+                string identityQuery = "SELECT @@IDENTITY";
+
+                int idElemento;
+
+                // Obtener el ID del elemento recién creado
+                using (OleDbCommand identityCommand = new OleDbCommand(identityQuery, this.conexion))
+                {
+                    idElemento = (int)identityCommand.ExecuteScalar();
+                }
 
                 this.conexion.Close();
 
-                return resultado;
+                return idElemento;
             }
             catch (Exception ex)
             {

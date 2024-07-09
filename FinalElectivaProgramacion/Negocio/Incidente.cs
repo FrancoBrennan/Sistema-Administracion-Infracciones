@@ -14,11 +14,13 @@ namespace Negocio
         private Infraccion infraccion;
         private Vehiculo vehiculo;
         private IncidenteDatos incDb;
+        private bool pagada; // solo usada en la ui
 
         public int Id { get => id; set => id = value; }
         public DateTime Fecha { get => fecha; set => fecha = value; }
         public Infraccion Infraccion { get => infraccion; set => infraccion = value; }
         public Vehiculo Vehiculo { get => vehiculo; set => vehiculo = value; }
+        public bool Pagada { get => pagada; set => pagada = value; }
 
         public Incidente(int id, DateTime fecha, Infraccion infraccion, Vehiculo vehiculo)
         {

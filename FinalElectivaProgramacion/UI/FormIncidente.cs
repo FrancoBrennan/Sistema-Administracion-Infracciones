@@ -112,7 +112,8 @@ namespace UI
 
         private bool validPatente(string patente, out string errorMessage)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(patente, "(^[A-Z]{3}[0-9]{3}$)|(^[A-Z]{2}[0-9]{3}[A-Z]{2}$)")) //Patente nueva y vieja
+            // Verifica que la petente sea formato ABC123 o AB123CD
+            if (System.Text.RegularExpressions.Regex.IsMatch(patente, "(^[A-Z]{3}[0-9]{3}$)|(^[A-Z]{2}[0-9]{3}[A-Z]{2}$)"))
             {
                 errorMessage = "";
                 return true;
@@ -126,8 +127,8 @@ namespace UI
 
         private void checkInputs()
         {
-            string a;
-            if (validPatente(textBoxPatente.Text, out a))
+            string error;
+            if (validPatente(textBoxPatente.Text, out error))
             {
                 buttonConf.Enabled = true;
             }
