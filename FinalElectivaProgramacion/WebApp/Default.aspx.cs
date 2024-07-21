@@ -1,4 +1,5 @@
 ﻿using Negocio;
+using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Web.UI;
@@ -47,7 +48,21 @@ namespace WebApp
             Button btn = (Button)sender;
             int idIncidente = int.Parse(btn.CommandArgument);
 
-            direccionTransito.descargarPDF(idIncidente);
+            PdfDocument doc = direccionTransito.descargarPDF(idIncidente);
+
+            // Guardar el documento en un MemoryStream
+            using (var stream = new System.IO.MemoryStream())
+            {
+                doc.Save(stream, false);
+
+                // Enviar el PDF al navegador para su descarga
+                Response.Clear();
+                Response.ContentType = "application/pdf";
+                Response.AddHeader("content-disposition", "attachment; filename=OrdenDe_Pago_Multa" + idIncidente + ".pdf");
+                Response.OutputStream.Write(stream.ToArray(), 0, stream.ToArray().Length);
+                Response.Flush();
+                Response.End();
+            }
         }
     }
 }

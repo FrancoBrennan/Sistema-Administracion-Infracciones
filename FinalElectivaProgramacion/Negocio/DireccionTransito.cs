@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Datos;
 using PdfSharp.Drawing;
+using PdfSharp.Drawing.BarCodes;
 using PdfSharp.Pdf;
+using BarcodeStandard;
+using System.Drawing.Imaging;
+using System.Net.NetworkInformation;
+using ZXing;
 
 namespace Negocio
 {
@@ -192,23 +200,89 @@ namespace Negocio
             return Incidentes.FindAll(inc => inc.Vehiculo.Patente.ToLower() == patente.ToLower());
         }
 
-        public void descargarPDF(int idIncidente)
+        public PdfDocument descargarPDF(int idIncidente)
         {
             Multa incidente = incidentes.Find(i => i.Id == idIncidente);
             double monto = incidente.Infraccion.calcularImporte(DateTime.Now);
+            DateTime vencimiento = incidente.Fecha.AddDays(30);
 
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             PdfDocument doc = new PdfDocument();
             PdfPage page = doc.AddPage();
 
             XGraphics gfx = XGraphics.FromPdfPage(page);
-            XFont font = new XFont("Arial", 20);
 
-            gfx.DrawString("ORDEN DE PAGO INFRACCIÓN DE TRÁNSITO", font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
-            gfx.DrawString("Orden de pago: " + idIncidente, font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
-            gfx.DrawString("Monto a pagar: " + monto, font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
+            // Fuentes y colores
+            XFont titleFont = new XFont("Arial", 24, XFontStyle.Bold);
+            XFont textFont = new XFont("Arial", 16);
+            XBrush titleBrush = XBrushes.Black;
+            XBrush textBrush = XBrushes.DarkBlue;
+            XPen linePen = new XPen(XColors.Black, 1);
 
-            doc.Save("OrdenPago-" + idIncidente);
+            double yPoint = 60; // Punto Y inicial
+
+            // Dibujar título
+            gfx.DrawString("ORDEN DE PAGO INFRACCIÓN DE TRÁNSITO", titleFont, titleBrush,
+                           new XRect(0, yPoint, page.Width, page.Height), XStringFormats.TopCenter);
+
+            yPoint += 60; // Incremento de Y para la línea separadora
+
+            // Dibujar separador
+            gfx.DrawLine(linePen, 40, yPoint, page.Width - 40, yPoint);
+
+            yPoint += 200; // Incremento de Y
+
+            // Dibujar orden de pago
+            gfx.DrawString("Orden de pago: #" + idIncidente, textFont, textBrush,
+                           new XRect(40, yPoint, page.Width - 80, page.Height), XStringFormats.TopLeft);
+
+            yPoint += 40; // Incremento de Y
+
+            // Dibujar monto a pagar
+            gfx.DrawString("Monto a pagar: U$D " + monto, textFont, textBrush,
+                           new XRect(40, yPoint, page.Width - 80, page.Height), XStringFormats.TopLeft);
+
+            yPoint += 40; // Incremento de Y
+
+            // Dibujar monto a pagar
+            gfx.DrawString("Vencimiento: " + vencimiento.ToString(), textFont, textBrush,
+                           new XRect(40, yPoint, page.Width - 80, page.Height), XStringFormats.TopLeft);
+
+            yPoint += 200; // Incremento de Y para el código de barras
+
+            // Dibujar separador
+            gfx.DrawLine(linePen, 40, yPoint, page.Width - 40, yPoint);
+
+            yPoint += 60; // Incremento de Y para la línea separadora
+
+            // Generar el código de barras
+            var barcodeWriter = new BarcodeWriter
+            {
+                Format = BarcodeFormat.CODE_128,
+                Options = new ZXing.Common.EncodingOptions
+                {
+                    Width = 300,
+                    Height = 100
+                }
+            };
+            var barcodeBitmap = barcodeWriter.Write(idIncidente.ToString());
+
+            // Convertir el Bitmap a un MemoryStream
+            using (var barcodeStream = new MemoryStream())
+            {
+                barcodeBitmap.Save(barcodeStream, ImageFormat.Png);
+                barcodeStream.Seek(0, SeekOrigin.Begin);
+
+                // Crear una imagen XImage desde el MemoryStream
+                XImage barcodeImage = XImage.FromStream(barcodeStream);
+
+                // Dibujar el código de barras en el PDF
+                gfx.DrawImage(barcodeImage, (page.Width - 300) / 2, yPoint, 300, 100);
+            }
+
+            return doc;
         }
     }
+
 }
+

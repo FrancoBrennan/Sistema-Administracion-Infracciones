@@ -12,7 +12,7 @@ namespace Datos
             // https://download.cnet.com/microsoft-access-database-engine-2010-redistributable-64-bit/3001-10254_4-75452796.html?dt=internalDownload
             // string connectionString = "Data Source=C:\\Proyecto Club Deportivo\\TPClubDeportivo\\CapaDeDatos\\BD.db";
             // Cadena de conexión a la base de datos Access
-            string connectionString = "Provider=Microsoft.ACE.OLEDB.16.0;Data Source=C:\\Users\\Lvt\\Downloads\\FinalElectivaProgramacion\\FinalElectivaProgramacion\\Datos\\DB.accdb";
+            string connectionString = "Provider=Microsoft.ACE.OLEDB.16.0;Data Source=Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Proyecto Infracciones\\FinalElectivaProgram\\FinalElectivaProgramacion\\Datos\\DB.accdb";
 
             this.conexion = new OleDbConnection(connectionString);
             return conexion;

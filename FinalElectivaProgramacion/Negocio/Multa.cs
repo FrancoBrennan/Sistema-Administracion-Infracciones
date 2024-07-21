@@ -54,5 +54,6 @@ namespace Negocio
 
             return dias >= 0 && dias <= 30; // Vence a los 30 dias el pago
         }
+
     }
 }
