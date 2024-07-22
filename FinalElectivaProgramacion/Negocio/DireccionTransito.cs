@@ -12,23 +12,23 @@ namespace Negocio
     public class DireccionTransito
     {
         private List<Infraccion> infracciones;
-        private List<Incidente> incidentes;
+        private List<Multa> incidentes;
         private List<Pago> pagos;
         private List<Vehiculo> vehiculos;
 
         InfraccionDatos infDb;
-        IncidenteDatos incDb;
+        MultaDatos multDb;
         PagoDatos pagoDB;
 
         public List<Infraccion> Infracciones { get => infracciones; set => infracciones = value; }
-        public List<Incidente> Incidentes { get => incidentes; set => incidentes = value; }
+        public List<Multa> Incidentes { get => incidentes; set => incidentes = value; }
         public List<Pago> Pagos { get => pagos; set => pagos = value; }
         public List<Vehiculo> Vehiculos { get => vehiculos; set => vehiculos = value; }
 
         public DireccionTransito()
         {
             infDb = new InfraccionDatos();
-            incDb = new IncidenteDatos();
+            multDb = new MultaDatos();
             pagoDB = new PagoDatos();
 
             inicializarListas();
@@ -45,7 +45,7 @@ namespace Negocio
         private void inicializarListas()
         {
             vehiculos = new List<Vehiculo>();
-            incidentes = new List<Incidente>();
+            incidentes = new List<Multa>();
             infracciones = new List<Infraccion>();
             pagos = new List<Pago>();
         }
@@ -76,7 +76,7 @@ namespace Negocio
         
         private void cargarIncidentes()
         {
-            OleDbDataReader readers = incDb.listar();
+            OleDbDataReader readers = multDb.listar();
 
             while (readers.Read())
             {
@@ -94,7 +94,7 @@ namespace Negocio
                 Infraccion infraccion = infracciones.First(i => i.Id == (int)readers["IdInfraccion"]);
 
                 // Agrega el incidente
-                Incidente inc = new Incidente((int)readers["Id"], DateTime.Parse((string)readers["Fecha"]), infraccion, vehiculo);
+                Multa inc = new Multa((int)readers["Id"], DateTime.Parse((string)readers["Fecha"]), infraccion, vehiculo);
 
                 incidentes.Add(inc);
             }
@@ -109,7 +109,7 @@ namespace Negocio
             while (readers.Read())
             {
                 // Buscar el incidente que se pagó
-                Incidente inc = incidentes.Find(i => i.Id == ((int)readers["IdIncidente"]));
+                Multa inc = incidentes.Find(i => i.Id == ((int)readers["IdIncidente"]));
 
                 Pago pago = new Pago((int)readers["Id"], DateTime.Parse((string)readers["Fecha"]), inc, (double)((long)readers["Monto"]));
 
@@ -153,12 +153,12 @@ namespace Negocio
             }
         }
 
-        public void agregarIncidente(Incidente inc)
+        public void agregarIncidente(Multa inc)
         {
             this.Incidentes.Add(inc);
         }
 
-        public void removerIncidente(Incidente inc)
+        public void removerIncidente(Multa inc)
         {
             this.Incidentes.Remove(inc);
         }
@@ -168,7 +168,7 @@ namespace Negocio
             this.vehiculos.Add(v);
         }
 
-        public void agregarPago(Incidente inc, double monto)
+        public void agregarPago(Multa inc, double monto)
         {
             Pago pago = new Pago(0, DateTime.Now, inc, monto);
             pago.Id = pago.agregarDb(pago.Fecha, pago.Incidente.Id, pago.Monto);
@@ -178,23 +178,23 @@ namespace Negocio
 
         public bool tienePagoVinculado(Infraccion inf)
         {
-            var incidentes = inf.Incidentes.Select(i => i.Id);
+            var incidentes = inf.Multas.Select(i => i.Id);
             return this.pagos.Any(p => incidentes.Contains(p.Incidente.Id));
         }
 
-        public bool tienePagoVinculado(Incidente inc)
+        public bool tienePagoVinculado(Multa inc)
         {
             return this.pagos.Any(p => p.Incidente.Id == inc.Id);
         }
 
-        public List<Incidente> buscarIncidentesPatente(string patente)
+        public List<Multa> buscarIncidentesPatente(string patente)
         {
             return Incidentes.FindAll(inc => inc.Vehiculo.Patente.ToLower() == patente.ToLower());
         }
 
         public void descargarPDF(int idIncidente)
         {
-            Incidente incidente = incidentes.Find(i => i.Id == idIncidente);
+            Multa incidente = incidentes.Find(i => i.Id == idIncidente);
             double monto = incidente.Infraccion.calcularImporte(DateTime.Now);
 
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);

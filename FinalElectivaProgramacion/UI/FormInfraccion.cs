@@ -31,7 +31,7 @@ namespace UI
             this.comboBoxTipo.SelectedIndex = comboBoxTipo.FindString(inf.isGrave() ? "Grave" : "Leve");
             this.textBoxDesc.Text = inf.Descripcion;
             this.textBoxMonto.Text = inf.Importe.ToString();
-            this.listBoxIncidentes.DataSource = inf.Incidentes;
+            this.listBoxIncidentes.DataSource = inf.Multas;
         }
 
         private void buttonConf_Click(object sender, EventArgs e)
@@ -104,9 +104,9 @@ namespace UI
 
         private void listBoxIncidentes_Format(object sender, ListControlConvertEventArgs e)
         {
-            string desc = ((Incidente)e.ListItem).Infraccion.Descripcion;
-            string fecha = ((Incidente)e.ListItem).Fecha.ToString("dd/MM/yy HH:mm");
-            string patente = ((Incidente)e.ListItem).Vehiculo.Patente;
+            string desc = ((Multa)e.ListItem).Infraccion.Descripcion;
+            string fecha = ((Multa)e.ListItem).Fecha.ToString("dd/MM/yy HH:mm");
+            string patente = ((Multa)e.ListItem).Vehiculo.Patente;
 
             e.Value = fecha + " | Patente: " + patente;
         }

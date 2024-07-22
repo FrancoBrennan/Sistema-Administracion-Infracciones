@@ -9,18 +9,18 @@ using System.Data.OleDb;
 
 namespace Datos
 {
-    public class IncidenteDatos
+    public class MultaDatos
     {
         Conexion conexion;
 
-        public IncidenteDatos()
+        public MultaDatos()
         {
             this.conexion = new Conexion();
         }
 
         public int agregar(DateTime fecha, int idInfraccion, string patente)
         {
-            string query = "INSERT INTO Incidente (Fecha, idInfraccion, Patente) VALUES (@Fecha,@idInfraccion,@Patente)";
+            string query = "INSERT INTO Multa (Fecha, idInfraccion, Patente) VALUES (@Fecha,@idInfraccion,@Patente)";
 
             // Crear y configurar el comando SQL
             using (OleDbCommand cmd = new OleDbCommand(query))
@@ -36,7 +36,7 @@ namespace Datos
 
         public int eliminar(int id)
         {
-            string query = "DELETE from Incidente WHERE ID = @Id";
+            string query = "DELETE from Multa WHERE ID = @Id";
 
             // Crear y configurar el comando SQL
             using (OleDbCommand cmd = new OleDbCommand(query))
@@ -50,7 +50,7 @@ namespace Datos
 
         public OleDbDataReader listar()
         {
-            return this.conexion.ejecutarSelect(new OleDbCommand("SELECT * FROM Incidente"));
+            return this.conexion.ejecutarSelect(new OleDbCommand("SELECT * FROM Multa"));
         }
     }
 }

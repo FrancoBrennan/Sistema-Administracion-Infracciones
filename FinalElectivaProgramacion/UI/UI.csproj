@@ -75,16 +75,16 @@
     <Compile Include="FormPrincipal.Designer.cs">
       <DependentUpon>FormPrincipal.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormIncidente.cs">
+    <Compile Include="FormMulta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormIncidente.Designer.cs">
-      <DependentUpon>FormIncidente.cs</DependentUpon>
+    <Compile Include="FormMulta.Designer.cs">
+      <DependentUpon>FormMulta.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormIncidente.resx">
-      <DependentUpon>FormIncidente.cs</DependentUpon>
+    <EmbeddedResource Include="FormMulta.resx">
+      <DependentUpon>FormMulta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormInfraccion.resx">
       <DependentUpon>FormInfraccion.cs</DependentUpon>

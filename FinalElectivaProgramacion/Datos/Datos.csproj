@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conexion.cs" />
-    <Compile Include="IncidenteDatos.cs" />
+    <Compile Include="MultaDatos.cs" />
     <Compile Include="InfraccionDatos.cs" />
     <Compile Include="PagoDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

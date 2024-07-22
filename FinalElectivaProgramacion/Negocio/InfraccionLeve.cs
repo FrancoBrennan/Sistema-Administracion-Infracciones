@@ -39,7 +39,7 @@ namespace Negocio
         // Las infracciones leves tienen un 25 % de descuento si se pagan 20 días antes de su vencimiento y un 15% si se pagan 10 días antes.
         public override double calcularImporte(DateTime suceso)
         {
-            DateTime vencimiento = suceso.AddDays(30);
+            DateTime vencimiento = suceso.AddDays(30); // 30 dias del vencimiento
             TimeSpan ts = vencimiento.Subtract(DateTime.Now);
             int dias = Convert.ToInt32(ts.TotalDays);
 
@@ -48,9 +48,7 @@ namespace Negocio
             if (dias >= 20)
             {
                 monto = monto * (100 - GetDescuento20Dias()) / 100;
-            }
-
-            if (dias >= 10)
+            } else if (dias >= 10)
             {
                 monto = monto * (100 - GetDescuento10Dias()) / 100;
             }

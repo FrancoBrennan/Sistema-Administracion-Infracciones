@@ -13,13 +13,13 @@ namespace Negocio
         private string descripcion;
         private double importe;
         private string tipo;
-        List<Incidente> incidentes;
+        List<Multa> multas;
         private InfraccionDatos infDb;
 
         public int Id { get => id; set => id = value; }
         public string Descripcion { get => descripcion; set => descripcion = value; }
         public double Importe { get => importe; set => importe = value; }
-        public List<Incidente> Incidentes { get => incidentes; }
+        public List<Multa> Multas { get => multas; }
 
         public Infraccion(int id, string descripcion, double importe, string tipo)
         {
@@ -29,7 +29,7 @@ namespace Negocio
             this.descripcion = descripcion;
             this.importe = importe;
             this.tipo = tipo;
-            this.incidentes = new List<Incidente>();
+            this.multas = new List<Multa>();
         }
 
         public abstract double calcularImporte(DateTime suceso);
@@ -50,7 +50,7 @@ namespace Negocio
         }
         public void eliminarInfraccionDb()
         {
-            foreach (var inc in incidentes)
+            foreach (var inc in multas)
             {
                 inc.eliminarDb();
             }
@@ -58,14 +58,14 @@ namespace Negocio
             infDb.eliminar(this.Id);
         }
 
-        public void agregarIncidente(Incidente suc)
+        public void agregarIncidente(Multa suc)
         {
-            this.incidentes.Add(suc);
+            this.multas.Add(suc);
         }
 
-        public void removerIncidente(Incidente suc)
+        public void removerIncidente(Multa suc)
         {
-            this.incidentes.Remove(suc);
+            this.multas.Remove(suc);
         }
     }
 }

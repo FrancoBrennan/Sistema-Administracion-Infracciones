@@ -137,11 +137,11 @@ namespace UI
             }
             else
             {
-                FormIncidente fi = new FormIncidente(dt.Infracciones, dt.Vehiculos);
-                fi.prepararCrear();
-                fi.ShowDialog();
+                FormMulta fm = new FormMulta(dt.Infracciones, dt.Vehiculos);
+                fm.prepararCrear();
+                fm.ShowDialog();
 
-                Incidente inc = fi.Inc;
+                Multa inc = fm.Inc;
                 if (inc != null)
                 {
                     dt.agregarIncidente(inc);
@@ -154,7 +154,7 @@ namespace UI
         // Eliminar Incidente
         private void buttonElimIncidente_Click(object sender, EventArgs e)
         {
-            Incidente inc = (Incidente)listBoxIncidente.SelectedItem;
+            Multa inc = (Multa)listBoxIncidente.SelectedItem;
             if (inc == null)
                 MessageBox.Show("No hay incidente seleccionado para eliminar.");
             else
@@ -176,12 +176,12 @@ namespace UI
         // Mostrar Incidente
         private void buttonMostrarIncidente_Click(object sender, EventArgs e)
         {
-            Incidente i = (Incidente)listBoxIncidente.SelectedItem;
+            Multa i = (Multa)listBoxIncidente.SelectedItem;
             if (i == null)
                 MessageBox.Show("No hay incidente seleccionado para mostrar.");
             else
             {
-                FormIncidente fi = new FormIncidente(i, dt.Infracciones);
+                FormMulta fi = new FormMulta(i, dt.Infracciones);
                 fi.prepararMostrar();
                 fi.ShowDialog();
             }
@@ -190,7 +190,7 @@ namespace UI
         // Pagar Incidente
         private void buttonPagoIncidente_Click(object sender, EventArgs e)
         {
-            Incidente inc = (Incidente)listBoxIncidente.SelectedItem;
+            Multa inc = (Multa)listBoxIncidente.SelectedItem;
             if (inc == null)
                 MessageBox.Show("No hay incidente seleccionado para pagar.");
             else
@@ -216,8 +216,8 @@ namespace UI
             if (string.IsNullOrEmpty(textBoxBuscarInc.Text) == false)
             {
                 listBoxIncidente.Items.Clear();
-                List<Incidente> incedentesNoPagos = dt.Incidentes.Where(i => !dt.tienePagoVinculado(i)).ToList();
-                foreach (Incidente a in incedentesNoPagos)
+                List<Multa> incedentesNoPagos = dt.Incidentes.Where(i => !dt.tienePagoVinculado(i)).ToList();
+                foreach (Multa a in incedentesNoPagos)
                 {
                     if (a.Vehiculo.Patente.ToLower().StartsWith(textBoxBuscarInc.Text.ToLower()))
                     {
@@ -265,7 +265,7 @@ namespace UI
         // Habilitar boton de pago de infraccion si no esta vencido
         private void listBoxIncidente_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Incidente inc = (Incidente)listBoxIncidente.SelectedItem;
+            Multa inc = (Multa)listBoxIncidente.SelectedItem;
             if (inc != null)
             {
                 if (!inc.verificarVencimiento())
@@ -313,9 +313,9 @@ namespace UI
 
         private void listBoxIncidente_Format(object sender, ListControlConvertEventArgs e)
         {
-            string desc = ((Incidente)e.ListItem).Infraccion.Descripcion;
-            string fecha = ((Incidente)e.ListItem).Fecha.ToString("dd/MM/yy");
-            string patente = ((Incidente)e.ListItem).Vehiculo.Patente;
+            string desc = ((Multa)e.ListItem).Infraccion.Descripcion;
+            string fecha = ((Multa)e.ListItem).Fecha.ToString("dd/MM/yy");
+            string patente = ((Multa)e.ListItem).Vehiculo.Patente;
 
             e.Value = fecha + " | Patente: " + patente + " | " + desc;
         }

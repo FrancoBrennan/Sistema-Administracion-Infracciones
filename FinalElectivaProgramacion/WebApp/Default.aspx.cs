@@ -27,7 +27,7 @@ namespace WebApp
 
             if (string.IsNullOrEmpty(patente) == false)
             {
-                List<Incidente> incidentes = direccionTransito.buscarIncidentesPatente(patente);
+                List<Multa> incidentes = direccionTransito.buscarIncidentesPatente(patente);
 
                 incidentes.ForEach(inc => inc.Pagada = direccionTransito.Pagos.Exists(p => p.Incidente.Id == inc.Id));
 

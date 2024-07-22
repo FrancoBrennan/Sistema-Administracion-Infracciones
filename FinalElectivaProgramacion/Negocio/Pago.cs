@@ -11,11 +11,11 @@ namespace Negocio
     {
         private int id;
         private DateTime fecha;
-        private Incidente incidente;
+        private Multa incidente;
         private double monto;
         private PagoDatos pagoDb;
 
-        public Pago(int id, DateTime fecha, Incidente incidente, double monto)
+        public Pago(int id, DateTime fecha, Multa incidente, double monto)
         {
             pagoDb = new PagoDatos();
 
@@ -27,7 +27,7 @@ namespace Negocio
 
         public int Id { get => id; set => id = value; }
         public DateTime Fecha { get => fecha; set => fecha = value; }
-        public Incidente Incidente { get => incidente; set => incidente = value; }
+        public Multa Incidente { get => incidente; set => incidente = value; }
         public double Monto { get => monto; set => monto = value; }
 
         public int agregarDb(DateTime fecha, int idIncidente, double monto)

@@ -12,14 +12,14 @@ using Negocio;
 
 namespace UI
 {
-    public partial class FormIncidente : Form
+    public partial class FormMulta : Form
     {
-        private Incidente inc;
+        private Multa mult;
         List<Vehiculo> vehiculos;
 
-        public Incidente Inc { get => inc; set => inc = value; }
+        public Multa Inc { get => mult; set => mult = value; }
 
-        public FormIncidente(List<Infraccion> infracciones, List<Vehiculo> vehiculos)
+        public FormMulta(List<Infraccion> infracciones, List<Vehiculo> vehiculos)
         {
             InitializeComponent();
             this.comboBoxInfraccion.DataSource = infracciones;
@@ -27,13 +27,13 @@ namespace UI
             this.comboBoxInfraccion.SelectedIndex = 0;
         }
 
-        public FormIncidente(Incidente i, List<Infraccion> infracciones)
+        public FormMulta(Multa i, List<Infraccion> infracciones)
         {
             InitializeComponent();
-            this.inc = i;
-            this.comboBoxInfraccion.DataSource = new[] { inc.Infraccion };
-            this.textBoxPatente.Text = inc.Vehiculo.Patente;
-            this.dateTimePickerIncidente.Value = inc.Fecha;
+            this.mult = i;
+            this.comboBoxInfraccion.DataSource = new[] { mult.Infraccion };
+            this.textBoxPatente.Text = mult.Vehiculo.Patente;
+            this.dateTimePickerIncidente.Value = mult.Fecha;
         }
 
         private void buttonConf_Click(object sender, EventArgs e)
@@ -54,11 +54,11 @@ namespace UI
                 vehi = vehiculos.First(v => v.Patente == patente);
             }
 
-            inc = new Incidente(0, fecha, inf, vehi);
-            inc.Id = inc.agregarDb(fecha, inf.Id, patente);
+            mult = new Multa(0, fecha, inf, vehi);
+            mult.Id = mult.agregarDb(fecha, inf.Id, patente);
 
-            vehi.agregarIncidente(inc);
-            inf.agregarIncidente(inc);
+            vehi.agregarIncidente(mult);
+            inf.agregarIncidente(mult);
 
             this.Close();
         }

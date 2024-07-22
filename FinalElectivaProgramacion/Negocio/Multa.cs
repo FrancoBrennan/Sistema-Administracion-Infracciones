@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Datos;
 
 namespace Negocio
 {
-    public class Incidente
+    public class Multa
     {
         private int id;
         private DateTime fecha;
         private Infraccion infraccion;
         private Vehiculo vehiculo;
-        private IncidenteDatos incDb;
+        private MultaDatos multDb;
         private bool pagada; // solo usada en la ui
 
         public int Id { get => id; set => id = value; }
@@ -22,9 +18,9 @@ namespace Negocio
         public Vehiculo Vehiculo { get => vehiculo; set => vehiculo = value; }
         public bool Pagada { get => pagada; set => pagada = value; }
 
-        public Incidente(int id, DateTime fecha, Infraccion infraccion, Vehiculo vehiculo)
+        public Multa(int id, DateTime fecha, Infraccion infraccion, Vehiculo vehiculo)
         {
-            this.incDb = new IncidenteDatos();
+            this.multDb = new MultaDatos();
 
             this.id = id;
             this.fecha = fecha;
@@ -41,12 +37,12 @@ namespace Negocio
 
         public void eliminarDb()
         {
-            incDb.eliminar(this.id);
+            multDb.eliminar(this.id);
         }
 
         public int agregarDb(DateTime fecha, int idInfraccion, string patente)
         {
-            return incDb.agregar(fecha, idInfraccion, patente);
+            return multDb.agregar(fecha, idInfraccion, patente);
         }
 
         // verificarVencimiento retorna false si ya esta vencido y true si aún no.
@@ -56,7 +52,7 @@ namespace Negocio
             TimeSpan ts = vencimiento.Subtract(DateTime.Now);
             int dias = Convert.ToInt32(ts.TotalDays);
 
-            return dias >= 0 && dias <= 30;
+            return dias >= 0 && dias <= 30; // Vence a los 30 dias el pago
         }
     }
 }

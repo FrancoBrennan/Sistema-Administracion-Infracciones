@@ -1,6 +1,6 @@
 ﻿namespace UI
 {
-    partial class FormIncidente
+    partial class FormMulta
     {
         /// <summary>
         /// Required designer variable.

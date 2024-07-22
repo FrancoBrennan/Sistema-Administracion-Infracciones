@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DireccionTransito.cs" />
-    <Compile Include="Incidente.cs" />
+    <Compile Include="Multa.cs" />
     <Compile Include="Infraccion.cs" />
     <Compile Include="InfraccionGrave.cs" />
     <Compile Include="InfraccionLeve.cs" />

@@ -10,21 +10,21 @@ namespace Negocio
     public class Vehiculo
     {
         private string patente;
-        List<Incidente> incidentes;
+        List<Multa> incidentes;
         List<Pago> pagos;
 
         public Vehiculo(string patente)
         {
             this.patente = patente;
-            this.incidentes = new List<Incidente>();
+            this.incidentes = new List<Multa>();
             this.pagos = new List<Pago>();
         }
 
         public string Patente { get => patente; set => patente = value; }
-        public List<Incidente> Incidentes { get => incidentes; set => incidentes = value; }
+        public List<Multa> Incidentes { get => incidentes; set => incidentes = value; }
         public List<Pago> Pagos { get => pagos; }
 
-        public void agregarIncidente(Incidente inc)
+        public void agregarIncidente(Multa inc)
         {
             this.incidentes.Add(inc);
         }
@@ -34,7 +34,7 @@ namespace Negocio
             this.pagos.Add(pago);
         }
 
-        public void removerIncidente(Incidente inc)
+        public void removerIncidente(Multa inc)
         {
             this.incidentes.Remove(inc);
         }
