@@ -11,7 +11,7 @@ namespace Negocio
     {
         private int id;
         private DateTime fecha;
-        private Multa incidente;
+        private Multa multa;
         private double monto;
         private PagoDatos pagoDb;
 
@@ -21,13 +21,13 @@ namespace Negocio
 
             this.id = id;
             this.fecha = fecha;
-            this.incidente = incidente;
+            this.multa = incidente;
             this.monto = monto;
         }
 
         public int Id { get => id; set => id = value; }
         public DateTime Fecha { get => fecha; set => fecha = value; }
-        public Multa Incidente { get => incidente; set => incidente = value; }
+        public Multa Multa { get => multa; set => multa = value; }
         public double Monto { get => monto; set => monto = value; }
 
         public int agregarDb(DateTime fecha, int idIncidente, double monto)

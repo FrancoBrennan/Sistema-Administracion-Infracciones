@@ -30,7 +30,9 @@ namespace WebApp
             {
                 List<Multa> incidentes = direccionTransito.buscarIncidentesPatente(patente);
 
-                incidentes.ForEach(inc => inc.Pagada = direccionTransito.Pagos.Exists(p => p.Incidente.Id == inc.Id));
+                //Para cada multa en la lista de incidentes, verifica si esa multa ha sido pagada.
+                //Si se encuentra un pago, se marca la multa como pagada.
+                incidentes.ForEach(inc => inc.Pagada = direccionTransito.Pagos.Exists(p => p.Multa.Id == inc.Id));  
 
                 GridView.DataSource = incidentes;
                 GridView.DataBind();

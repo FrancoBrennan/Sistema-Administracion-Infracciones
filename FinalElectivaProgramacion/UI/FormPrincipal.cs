@@ -24,7 +24,7 @@ namespace UI
             listBoxInfraccion.DataSource = dt.Infracciones;
             listBoxInfraccion.ClearSelected();
             refreshListBoxIncidentes();
-            dataGridViewPagos.DataSource = dt.Pagos.Select(p => new { ID = p.Id, Fecha = p.Fecha.ToShortDateString(), Incidente = p.Incidente.Infraccion.Descripcion, Monto = "$" + p.Monto }).ToList();
+            dataGridViewPagos.DataSource = dt.Pagos.Select(p => new { ID = p.Id, Fecha = p.Fecha.ToShortDateString(), Multa = p.Multa.Infraccion.Descripcion, Monto = "$" + p.Monto }).ToList();
         }
 
         private void FormPrincipal_Load(object sender, EventArgs e)
@@ -128,7 +128,7 @@ namespace UI
             }
         }
 
-        // Crear Incidente
+        // Crear Multa
         private void buttonCrearIncidente_Click(object sender, EventArgs e)
         {
             if (dt.Infracciones.Count == 0)
@@ -151,10 +151,10 @@ namespace UI
             }
         }
 
-        // Eliminar Incidente
+        // Eliminar Multa
         private void buttonElimIncidente_Click(object sender, EventArgs e)
         {
-            Multa inc = (Multa)listBoxIncidente.SelectedItem;
+            Multa inc = (Multa)listBoxMulta.SelectedItem;
             if (inc == null)
                 MessageBox.Show("No hay incidente seleccionado para eliminar.");
             else
@@ -173,10 +173,10 @@ namespace UI
             }
         }
 
-        // Mostrar Incidente
+        // Mostrar Multa
         private void buttonMostrarIncidente_Click(object sender, EventArgs e)
         {
-            Multa i = (Multa)listBoxIncidente.SelectedItem;
+            Multa i = (Multa)listBoxMulta.SelectedItem;
             if (i == null)
                 MessageBox.Show("No hay incidente seleccionado para mostrar.");
             else
@@ -187,10 +187,11 @@ namespace UI
             }
         }
 
-        // Pagar Incidente
+        // Pagar Multa
         private void buttonPagoIncidente_Click(object sender, EventArgs e)
         {
-            Multa inc = (Multa)listBoxIncidente.SelectedItem;
+            Multa inc = (Multa)listBoxMulta.SelectedItem;
+            
             if (inc == null)
                 MessageBox.Show("No hay incidente seleccionado para pagar.");
             else
@@ -205,23 +206,23 @@ namespace UI
 
                 refreshListBoxIncidentes();
                 dataGridViewPagos.DataSource = null;
-                dataGridViewPagos.DataSource = dt.Pagos.Select(p => new { ID = p.Id, Fecha = p.Fecha.ToShortDateString(), Incidente = p.Incidente.Infraccion.Descripcion, Monto = "$" + p.Monto }).ToList();
+                dataGridViewPagos.DataSource = dt.Pagos.Select(p => new { ID = p.Id, Fecha = p.Fecha.ToShortDateString(), Multa = p.Multa.Infraccion.Descripcion, Monto = "$" + p.Monto }).ToList();
             }
         }
 
-        // Buscar Incidente por patente
+        // Buscar Multa por patente
         private void textBoxBuscarInc_TextChanged(object sender, EventArgs e)
         {
-            listBoxIncidente.DataSource = null;
+            listBoxMulta.DataSource = null;
             if (string.IsNullOrEmpty(textBoxBuscarInc.Text) == false)
             {
-                listBoxIncidente.Items.Clear();
+                listBoxMulta.Items.Clear();
                 List<Multa> incedentesNoPagos = dt.Incidentes.Where(i => !dt.tienePagoVinculado(i)).ToList();
                 foreach (Multa a in incedentesNoPagos)
                 {
                     if (a.Vehiculo.Patente.ToLower().StartsWith(textBoxBuscarInc.Text.ToLower()))
                     {
-                        listBoxIncidente.Items.Add(a);
+                        listBoxMulta.Items.Add(a);
                     }
                 }
             }
@@ -265,7 +266,7 @@ namespace UI
         // Habilitar boton de pago de infraccion si no esta vencido
         private void listBoxIncidente_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Multa inc = (Multa)listBoxIncidente.SelectedItem;
+            Multa inc = (Multa)listBoxMulta.SelectedItem;
             if (inc != null)
             {
                 if (!inc.verificarVencimiento())
@@ -283,7 +284,7 @@ namespace UI
         private void panel2_MouseHover(object sender, EventArgs e)
         {
             tt.SetToolTip(this.panel2, "Ya pasaron mas de 30 dias, el pago esta vencido.");
-            if (buttonPagoIncidente.Enabled == false && listBoxIncidente.SelectedItem != null)
+            if (buttonPagoIncidente.Enabled == false && listBoxMulta.SelectedItem != null)
             {
                 tt.Active = true;
             }
@@ -293,12 +294,12 @@ namespace UI
             }
         }
 
-        // Mostrar incidentes sin pagos vinculados
+        // Mostrar Multas sin pagos vinculados
         private void refreshListBoxIncidentes()
         {
-            listBoxIncidente.DataSource = null;
-            listBoxIncidente.DataSource = dt.Incidentes.Where(i => !dt.tienePagoVinculado(i)).ToList();
-            listBoxIncidente.ClearSelected();
+            listBoxMulta.DataSource = null;
+            listBoxMulta.DataSource = dt.Incidentes.Where(i => !dt.tienePagoVinculado(i)).ToList();
+            listBoxMulta.ClearSelected();
         }
 
         // Metodos para dar formato a los listbox

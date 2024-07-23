@@ -33,12 +33,12 @@ namespace UI
             this.mult = i;
             this.comboBoxInfraccion.DataSource = new[] { mult.Infraccion };
             this.textBoxPatente.Text = mult.Vehiculo.Patente;
-            this.dateTimePickerIncidente.Value = mult.Fecha;
+            this.dateTimePickerMulta.Value = mult.Fecha;
         }
 
         private void buttonConf_Click(object sender, EventArgs e)
         {
-            DateTime fecha = this.dateTimePickerIncidente.Value;
+            DateTime fecha = this.dateTimePickerMulta.Value;
             Infraccion inf = (Infraccion)this.comboBoxInfraccion.SelectedItem;
             string patente = textBoxPatente.Text;
 
@@ -86,7 +86,7 @@ namespace UI
         {
             this.buttonConf.Visible = false;
             this.buttonCancel.Visible = true;
-            this.dateTimePickerIncidente.Enabled = false;
+            this.dateTimePickerMulta.Enabled = false;
             this.comboBoxInfraccion.Enabled = false;
             this.textBoxPatente.Enabled = false;
         }
@@ -141,6 +141,11 @@ namespace UI
         private void textBoxPatente_TextChanged(object sender, EventArgs e)
         {
             checkInputs();
+        }
+
+        private void FormMulta_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -140,7 +140,7 @@ namespace Negocio
             // Vinculamos los pagos a sus vehiculos.
             foreach (var pago in pagos)
             {
-                pago.Incidente.Vehiculo.agregarPago(pago);
+                pago.Multa.Vehiculo.agregarPago(pago);
             }
         }
 
@@ -179,20 +179,20 @@ namespace Negocio
         public void agregarPago(Multa inc, double monto)
         {
             Pago pago = new Pago(0, DateTime.Now, inc, monto);
-            pago.Id = pago.agregarDb(pago.Fecha, pago.Incidente.Id, pago.Monto);
-            pago.Incidente.Vehiculo.agregarPago(pago);
+            pago.Id = pago.agregarDb(pago.Fecha, pago.Multa.Id, pago.Monto);
+            pago.Multa.Vehiculo.agregarPago(pago);
             pagos.Add(pago);
         }
 
         public bool tienePagoVinculado(Infraccion inf)
         {
             var incidentes = inf.Multas.Select(i => i.Id);
-            return this.pagos.Any(p => incidentes.Contains(p.Incidente.Id));
+            return this.pagos.Any(p => incidentes.Contains(p.Multa.Id));
         }
 
         public bool tienePagoVinculado(Multa inc)
         {
-            return this.pagos.Any(p => p.Incidente.Id == inc.Id);
+            return this.pagos.Any(p => p.Multa.Id == inc.Id);
         }
 
         public List<Multa> buscarIncidentesPatente(string patente)
